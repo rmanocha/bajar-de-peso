@@ -7,10 +7,15 @@ from django.shortcuts import render_to_response
 from bajar_de_peso.bajarpeso.models import WeightTracker
 
 import datetime
+import time
 
 def main(request):
     if request.method == 'POST':
-        track = WeightTracker(weight = request.POST['weight'], date = request.POST['date'])
+        try:
+            date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
+        except ValueError, e:
+            return HttpResponse('Error in converting time')
+        track = WeightTracker(weight = float(request.POST['weight']), date = date)
         track.put()
         return HttpResponse('All Done!!')
     else:
