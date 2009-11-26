@@ -40,6 +40,6 @@ def main(request):
         return render_to_response('index.html', data_dict)
 
 def get_prev_date(request):
-    first_entry = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date').get()
+    first_entry = WeightTracker.all().filter('user = ', users.get_current_user()).order('date').get()
     first_date = first_entry.date if first_entry else datetime.date.today()
     return HttpResponse(str(first_date - datetime.timedelta(1)))
