@@ -63,7 +63,6 @@
                     $.get('/get_prev_date/', {}, function(data) {
                         var input_elem = $('<td></td>').attr('align', 'center').append($('<input type="text" />'));
                         $('#data-table > tbody:last').append($('<tr></tr>').append($('<td></td>').html(data).attr('align','center')).append(input_elem));
-                        input_elem.focus();
                     });
                 }
                 return false;
