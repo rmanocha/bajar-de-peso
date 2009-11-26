@@ -36,7 +36,12 @@
         $(document).ready(function() {
             $('input').live('keypress', function(e) {
                 if(e.keyCode == 13) {
-                    $.post('/', {'date' : '{{ today }}', 'weight' : $(this).val()});
+                    $.post('/', {'date' : '{{ today }}', 'weight' : $(this).val()},
+                        function(data) {
+                            console.log(data.error);
+                            console.log(data.msg);
+                    }, 'json');
+                    $(this).parent().html($(this).val());
                 }
             });
         });

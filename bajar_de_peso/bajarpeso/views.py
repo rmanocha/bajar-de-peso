@@ -3,6 +3,7 @@ from google.appengine.api import users
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.utils import simplejson
 
 from bajar_de_peso.bajarpeso.models import WeightTracker
 
@@ -11,13 +12,17 @@ import time
 
 def main(request):
     if request.method == 'POST':
+        return_msg = {}
         try:
             date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
+            track = WeightTracker(weight = float(request.POST['weight']), date = date)
+            track.put()
+            return_msg['error'] = 0
+            return_msg['msg'] = 'Data was saved succesfully'
         except ValueError, e:
-            return HttpResponse('Error in converting time')
-        track = WeightTracker(weight = float(request.POST['weight']), date = date)
-        track.put()
-        return HttpResponse('All Done!!')
+            return_msg['error'] = 1
+            return_msg['msg'] = 'The date was not in the correct format'
+        return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
     else:
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
         data_dict = {'data' : all_data}
