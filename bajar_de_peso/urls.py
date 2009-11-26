@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     # (r'^admin/(.*)', admin.site.root),
     (r'^$', 'bajar_de_peso.bajarpeso.views.main'),
     (r'^get_prev_date/$', 'bajar_de_peso.bajarpeso.views.get_prev_date'),
+    (r'^get_chart_data/$', 'bajar_de_peso.bajarpeso.views.get_chart_data'),
 )
