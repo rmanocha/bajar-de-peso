@@ -15,15 +15,16 @@ def main(request):
         return_msg = {}
         try:
             date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
-            date_entry = WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get()
-            if date_entry:
-                date_entry.weight = float(request.POST['weight'])
-                date_entry.put()
+            tracker = WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get()
+            if tracker:
+                tracker.weight = float(request.POST['weight'])
+                tracker.put()
             else:
-                track = WeightTracker(weight = float(request.POST['weight']), date = date)
-                track.put()
+                tracker = WeightTracker(weight = float(request.POST['weight']), date = date)
+                tracker.put()
             return_msg['error'] = 0
             return_msg['msg'] = 'Data was saved succesfully'
+            return_msg['weight'] = str(tracker.weight)
         except ValueError, e:
             return_msg['error'] = 1
             return_msg['msg'] = 'The date was not in the correct format'

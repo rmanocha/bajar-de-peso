@@ -51,8 +51,8 @@
                     var date_elem = elem.parent().prev('td');
                     $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
                         function(data) {
+                            elem.parent().html(data.weight);
                     }, 'json');
-                    elem.parent().html(elem.val());
                 }
             });
             $('#add_prev_date').click(function() {
