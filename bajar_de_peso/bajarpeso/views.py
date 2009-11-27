@@ -47,5 +47,5 @@ def get_prev_date(request):
 
 def get_chart_data(request):
     all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
-    data_dict = {'data' : map(lambda entry : (entry.date.day, entry.weight), all_data), 'label' : 'Weight Tracker'}
+    data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data), 'label' : 'Weight Tracker'}
     return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
