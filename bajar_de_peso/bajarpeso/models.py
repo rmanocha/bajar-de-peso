@@ -8,4 +8,4 @@ class WeightTracker(db.Model):
     weight = db.FloatProperty()
 
     def __str__(self):
-        return '%skgs on %s' % (self.weight, self.date)
+        return '%skgs on %s for %s' % (self.weight, self.date, users.get_current_user().nickname())
