@@ -15,6 +15,8 @@
                         <tr>
                             <th>Date</th>
                             <th>Weight (in kgs)</th>
+                            <th>Difference</th>
+                            <th>Average</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -22,12 +24,16 @@
                             <tr>
                                 <td align="center">{{ today }}</td>
                                 <td align="center" class="weight-input"><input type="text" /></td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         {% endif %}
                         {% for entry in data %}
                             <tr>
                                 <td align="center">{{ entry.date }}</td>
                                 <td align="center" class="weight-input">{{ entry.weight }}</td>
+                                <td align="center">{{ entry.loss }}</td>
+                                <td align="center">{{ entry.avg }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -74,6 +80,8 @@
                 }
                 return false;
             });
+
+
         });
 
         google.load('visualization', '1', {'packages' : ['linechart']});
