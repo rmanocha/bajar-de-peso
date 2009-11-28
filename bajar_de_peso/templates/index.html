@@ -14,18 +14,18 @@
                     <tbody>
                         {% if today %}
                             <tr>
-                                <td align="center">{{ today }}</td>
-                                <td align="center" class="weight-input"><input type="text" /></td>
+                                <td>{{ today }}</td>
+                                <td class="weight-input"><input type="text" /></td>
                                 <td id="{{ today }}-loss">N/A</td>
                                 <td id="{{ today }}-avg">N/A</td>
                             </tr>
                         {% endif %}
                         {% for entry in data %}
                             <tr>
-                                <td align="center">{{ entry.date }}</td>
-                                <td align="center" class="weight-input">{{ entry.weight }}</td>
-                                <td align="center" id="{{ entry.date }}-loss"></td>
-                                <td align="center" id="{{ entry.date }}-avg"></td>
+                                <td>{{ entry.date }}</td>
+                                <td class="weight-input">{{ entry.weight }}</td>
+                                <td id="{{ entry.date }}-loss"></td>
+                                <td id="{{ entry.date }}-avg"></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -68,8 +68,8 @@
                         var input_elem = $('<input type="text />');
                         $('#data-table > tbody:last')
                             .append($('<tr></tr>')
-                                .append($('<td></td>').html(data).attr('align','center'))
-                                .append($('<td></td>').attr('align', 'center').attr('class', 'weight-input')
+                                .append($('<td></td>').html(data))
+                                .append($('<td></td>').attr('class', 'weight-input')
                                     .append(input_elem)
                                     .append(delete_elem)
                                 )
