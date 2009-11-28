@@ -46,3 +46,7 @@ input {
     width: 40px;
     margin-right: 40px;
 }
+
+h1.no-bottom-margin {
+    margin-bottom: 0px;
+}
