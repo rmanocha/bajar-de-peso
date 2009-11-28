@@ -35,6 +35,8 @@ def main(request):
     else:
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
         data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL()}
+        settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
+        data_dict['units'] = settings.units if settings else 'kgs'
 
         #Need to put this try/except block in case no entries for 'this' user have been created
         try:
