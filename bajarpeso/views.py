@@ -11,6 +11,8 @@ from bajarpeso.forms import SettingsForm
 import datetime
 import time
 
+GET_LOGOUT_URL = lambda : users.create_logout_url('/')
+
 def main(request):
     if request.method == 'POST':
         return_msg = {}
@@ -32,7 +34,7 @@ def main(request):
         return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
     else:
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
-        data_dict = {'data' : all_data}
+        data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL()}
 
         #Need to put this try/except block in case no entries for 'this' user have been created
         try:
@@ -67,4 +69,4 @@ def edit_settings(request):
     else:
         form = SettingsForm(instance = user_settings)
 
-    return render_to_response('settings.html', {'form' : form});
+    return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL()});
