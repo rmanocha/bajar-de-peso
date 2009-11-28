@@ -26,7 +26,7 @@ $(document).ready(function() {
             $('input')[0].focus();
         } else {
             $.get('/get_prev_date/', {}, function(data) {
-                var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png').attr('style', 'border: none;')).click(function() { $(this).parent().parent().remove(); return false; });
+                var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png').attr('id', 'delete-img')).click(function() { $(this).parent().parent().remove(); return false; });
                 var input_elem = $('<input type="text />');
                 $('#data-table > tbody:last')
                     .append($('<tr></tr>')
