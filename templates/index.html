@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-        <div class="grid_8">
+        <div class="grid_6">
             <table width="100%" id="data-table">
                 <thead>
                     <tr>
@@ -29,10 +29,10 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div id="placeholder" style="width:600px;height:300px;"></div>
-        </div>
-        <div class="grid_4">
             <p><a href="#" id="add_prev_date" class="no-deco"><img src="/static/images/add.png" /> Add data for previous date.</a></p>
+        </div>
+        <div class="grid_10">
+            <div id="placeholder" style="width:600px;height:300px;"></div>
         </div>
         <div class="clear"></div>
 {% endblock %}

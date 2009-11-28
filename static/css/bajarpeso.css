@@ -13,3 +13,8 @@ a.no-deco {
 a#header {
     color: #8FC73E;
 }
+
+input {
+    width: 40px;
+    margin-right: 40px;
+}
