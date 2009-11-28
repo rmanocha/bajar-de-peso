@@ -56,13 +56,15 @@ def get_chart_data(request):
     return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
 
 def edit_settings(request):
+    user_settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
     if request.method == 'POST':
-        form = SettingsForm(request.POST)
+        form = SettingsForm(request.POST, instance = user_settings)
         if form.is_valid():
-            form.save(users.get_current_user())
+            item = form.save(commit = False)
+            item.user = users.get_current_user()
+            item.put()
             return HttpResponse('Thanks for editing your settings')
     else:
-        user_settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
-        form = SettingsForm(initial = {'units' : user_settings.units if user_settings else 'kgs'})
+        form = SettingsForm(instance = user_settings)
 
     return render_to_response('settings.html', {'form' : form});
