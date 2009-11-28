@@ -65,14 +65,22 @@
                 } else {
                     $.get('/get_prev_date/', {}, function(data) {
                         var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png').attr('style', 'border: none;')).click(function() { $(this).parent().parent().remove(); return false; });
-                        var input_elem = $('<td></td>').attr('align', 'center').append($('<input type="text" />')).append(delete_elem);
-                        $('#data-table > tbody:last').append($('<tr></tr>').append($('<td></td>').html(data).attr('align','center')).append(input_elem));
+                        var input_elem = $('<input type="text />');
+                        $('#data-table > tbody:last')
+                            .append($('<tr></tr>')
+                                .append($('<td></td>').html(data).attr('align','center'))
+                                .append($('<td></td>').attr('align', 'center').attr('class', 'weight-input')
+                                    .append(input_elem)
+                                    .append(delete_elem)
+                                )
+                                .append($('<td></td>').attr('id',data + '-loss'))
+                                .append($('<td></td>').attr('id', data + '-avg'))
+                            );
+                        input_elem.focus();
                     });
                 }
                 return false;
             });
-
-
         });
 
         google.load('visualization', '1', {'packages' : ['linechart']});
