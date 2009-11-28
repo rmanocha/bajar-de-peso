@@ -18,8 +18,12 @@ tr.odd td {
     background: #f7fbff;
 }
 
+tr.even td {
+    background: white;
+}
+
 thead th {
-    background: $f4f9fe;
+    background: #f4f9fe;
     text-align: center;
     color: #66a3d3;
     border-left: 1px solid #e5eff8;
