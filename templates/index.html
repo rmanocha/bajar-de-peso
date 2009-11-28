@@ -15,21 +15,21 @@
                         <tr>
                             <td>{{ today }}</td>
                             <td class="weight-input"><input type="text" /></td>
-                            <td id="{{ today }}-loss">N/A</td>
-                            <td id="{{ today }}-avg">N/A</td>
+                            <td id="loss-{{ today }}">N/A</td>
+                            <td id="avg-{{ today }}">N/A</td>
                         </tr>
                     {% endif %}
                     {% for entry in data %}
                         <tr>
                             <td>{{ entry.date }}</td>
                             <td class="weight-input">{{ entry.weight }}</td>
-                            <td id="{{ entry.date }}-loss"></td>
-                            <td id="{{ entry.date }}-avg"></td>
+                            <td id="loss-{{ entry.date }}"></td>
+                            <td id="avg-{{ entry.date }}"></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <p><a href="#" id="add_prev_date" class="no-deco"><img src="/static/images/add.png" /> Add data for previous date.</a></p>
+            <p><a href="#" id="add_prev_date" class="no-deco"><img alt="Add data" src="/static/images/add.png" /> Add data for previous date.</a></p>
         </div>
         <div class="grid_10">
             <div id="placeholder" style="width:600px;height:300px;"></div>
@@ -37,83 +37,5 @@
         <div class="clear"></div>
 {% endblock %}
 {% block js %}
-   <script type="text/javascript">
-        $(document).ready(function() {
-            function bindInput() {
-                $('.weight-input').dblclick(function() {
-                    var weight = $(this).html();
-                    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); });
-                    $(this).html(new_elem);
-                    new_elem.focus();
-                });
-            }
-            bindInput();
-            $('input').live('keypress', function(e) {
-                if(e.keyCode == 13) {
-                    var elem = $(this);
-                    var date_elem = elem.parent().prev('td');
-                    $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
-                        function(data) {
-                            elem.parent().html(data.weight);
-                            $('#placeholder').html('');
-                            drawChart();
-                    }, 'json');
-                }
-            });
-            $('#add_prev_date').click(function() {
-                if($('input').length != 0) {
-                    alert('Please enter data in the focused field before adding new entries');
-                    $('input')[0].focus();
-                } else {
-                    $.get('/get_prev_date/', {}, function(data) {
-                        var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png').attr('style', 'border: none;')).click(function() { $(this).parent().parent().remove(); return false; });
-                        var input_elem = $('<input type="text />');
-                        $('#data-table > tbody:last')
-                            .append($('<tr></tr>')
-                                .append($('<td></td>').html(data))
-                                .append($('<td></td>').attr('class', 'weight-input')
-                                    .append(input_elem)
-                                    .append(delete_elem)
-                                )
-                                .append($('<td></td>').attr('id',data + '-loss'))
-                                .append($('<td></td>').attr('id', data + '-avg'))
-                            );
-                        input_elem.focus();
-                        bindInput();
-                    });
-                }
-                return false;
-            });
-        });
-
-        google.load('visualization', '1', {'packages' : ['linechart']});
-        google.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            $.getJSON('/get_chart_data/', {}, function(weight_data) {
-                data.addColumn('string', 'Date');
-                data.addColumn('number', 'Weight (kgs)');
-                data.addColumn('number', 'Moving Avg. (kgs)');
-                data.addRows(weight_data.data.length);
-                for(var i = 0; i < weight_data.data.length; i++) {
-                    data.setCell(i, 0, weight_data.data[i][0]);
-                    data.setCell(i, 1, weight_data.data[i][1]); 
-                    if(i > 3) {
-                        var tmp_sum = 0;
-                        for(var j = 0; j < 5; j++)
-                            tmp_sum += weight_data.data[i - j][1];
-                        avg = Math.round((tmp_sum/5)*100)/100;
-                        data.setCell(i, 2, avg);
-                        $('#' + weight_data.data[i][0] + '-avg').html(avg);
-                    } else {
-                        $('#' + weight_data.data[i][0] + '-avg').html('N/A');
-                    }
-                    $('#' + weight_data.data[i][0] + '-loss').html((i > 0) ? Math.round((weight_data.data[i - 1][1] - weight_data.data[i][1])*100)/100 : 'N/A');
-                }
-                var chart = new google.visualization.LineChart(document.getElementById('placeholder'));
-                chart.draw(data, {width: 600, height: 300, title : 'My Weight Tracker'});
-            });
-        }
-    </script>
+    <script type="text/javascript" src="/static/js/script.js"></script>
 {% endblock %}
