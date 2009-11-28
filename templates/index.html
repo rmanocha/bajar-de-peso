@@ -1,42 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-       <div id="content" style="width: 80%; float: left;">
-            <div>
-                <table width="100%" id="data-table">
-                    <thead>
+        <div class="grid_8">
+            <table width="100%" id="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Weight (in kgs)</th>
+                        <th>Difference</th>
+                        <th>Average</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if today %}
                         <tr>
-                            <th>Date</th>
-                            <th>Weight (in kgs)</th>
-                            <th>Difference</th>
-                            <th>Average</th>
+                            <td>{{ today }}</td>
+                            <td class="weight-input"><input type="text" /></td>
+                            <td id="{{ today }}-loss">N/A</td>
+                            <td id="{{ today }}-avg">N/A</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% if today %}
-                            <tr>
-                                <td>{{ today }}</td>
-                                <td class="weight-input"><input type="text" /></td>
-                                <td id="{{ today }}-loss">N/A</td>
-                                <td id="{{ today }}-avg">N/A</td>
-                            </tr>
-                        {% endif %}
-                        {% for entry in data %}
-                            <tr>
-                                <td>{{ entry.date }}</td>
-                                <td class="weight-input">{{ entry.weight }}</td>
-                                <td id="{{ entry.date }}-loss"></td>
-                                <td id="{{ entry.date }}-avg"></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endif %}
+                    {% for entry in data %}
+                        <tr>
+                            <td>{{ entry.date }}</td>
+                            <td class="weight-input">{{ entry.weight }}</td>
+                            <td id="{{ entry.date }}-loss"></td>
+                            <td id="{{ entry.date }}-avg"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <div id="placeholder" style="width:600px;height:300px;"></div>
         </div>
-        <div id="sidebar" style="width: 20%; float: right;">
-            <p><a href="#" id="add_prev_date" style="text-decoration: none;"><img src="/static/images/add.png" style="border: none;" /> Add data for previous date.</a></p>
-            <p><a href="/settings/">Edit Settings</a></p>
+        <div class="grid_4">
+            <p><a href="#" id="add_prev_date" class="no-deco"><img src="/static/images/add.png" /> Add data for previous date.</a></p>
         </div>
+        <div class="clear"></div>
 {% endblock %}
 {% block js %}
    <script type="text/javascript">

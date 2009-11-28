@@ -1,3 +1,15 @@
 td {
     text-align: center;
 }
+
+.text-center {
+    text-align: center;
+}
+
+a.no-deco {
+    text-decoration: none;
+}
+
+a#header {
+    color: #8FC73E;
+}
