@@ -24,8 +24,8 @@
                             <tr>
                                 <td align="center">{{ entry.date }}</td>
                                 <td align="center" class="weight-input">{{ entry.weight }}</td>
-                                <td align="center" id="{{ entry.date }}-loss">{{ entry.loss }}</td>
-                                <td align="center" id="{{ entry.date }}-avg">{{ entry.avg }}</td>
+                                <td align="center" id="{{ entry.date }}-loss"></td>
+                                <td align="center" id="{{ entry.date }}-avg"></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -88,8 +88,17 @@
                 for(var i = 0; i < weight_data.data.length; i++) {
                     data.setCell(i, 0, weight_data.data[i][0]);
                     data.setCell(i, 1, weight_data.data[i][1]); 
-                    if(i > 3)
-                        data.setCell(i, 2, weight_data.data[i][2]);
+                    if(i > 3) {
+                        var tmp_sum = 0;
+                        for(var j = 0; j < 5; j++)
+                            tmp_sum += weight_data.data[i - j][1];
+                        avg = Math.round((tmp_sum/5)*100)/100;
+                        data.setCell(i, 2, avg);
+                        $('#' + weight_data.data[i][0] + '-avg').html(avg);
+                    } else {
+                        $('#' + weight_data.data[i][0] + '-avg').html('N/A');
+                    }
+                    $('#' + weight_data.data[i][0] + '-loss').html((i > 0) ? Math.round((weight_data.data[i - 1][1] - weight_data.data[i][1])*100)/100 : 'N/A');
                 }
                 var chart = new google.visualization.LineChart(document.getElementById('placeholder'));
                 chart.draw(data, {width: 600, height: 300, title : 'My Weight Tracker'});

@@ -31,20 +31,8 @@ def main(request):
         return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
     else:
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
-        data_dict = {'data' : []}
+        data_dict = {'data' : all_data}
 
-        for i in range(0, all_data.count()):
-            if i < all_data.count() - 1:
-                loss = all_data[i + 1].weight - all_data[i].weight
-            else:
-                loss = 'N/A'
-            
-            if i <= all_data.count() - 5:
-                avg = sum(map(lambda l: l.weight, all_data[i:i + 5]))/5
-            else:
-                avg = 'N/A'
-            data_dict['data'].append({'date' : all_data[i].date, 'weight' : all_data[i].weight, 'loss' : loss, 'avg' : avg})
-        
         #Need to put this try/except block in case no entries for 'this' user have been created
         try:
             if all_data.get().date != datetime.date.today():
@@ -60,8 +48,8 @@ def get_prev_date(request):
 
 def get_chart_data(request):
     all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
-    data_dict = {'data' : map(lambda entry : [str(entry.date), entry.weight], all_data)}
+    data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
     #This seems like a Hack. There needs to be a better way of doing things.
-    for i in range(5, all_data.count() + 1):
-        data_dict['data'][i - 1].append(sum(map(lambda l: l.weight, all_data[i - 5:i]))/5)
+    #for i in range(5, all_data.count() + 1):
+    #    data_dict['data'][i - 1].append(sum(map(lambda l: l.weight, all_data[i - 5:i]))/5)
     return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
