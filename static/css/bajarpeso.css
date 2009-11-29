@@ -58,3 +58,11 @@ img#delete-img {
 div.spacer div {
     margin-bottom: 10px;
 }
+
+div#navbar {
+    text-align: right;
+}
+
+div#navbar a {
+    color: #CCB458;
+}
