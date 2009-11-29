@@ -75,3 +75,7 @@ div.success {
 div.failure {
     background-color: red;
 }
+
+div.bot-margin {
+    margin-bottom: 10px;
+}

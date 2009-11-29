@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.utils import simplejson
 
 from bajarpeso.models import WeightTracker, WeightTrackerSettings
-from bajarpeso.forms import SettingsForm
+from bajarpeso.forms import SettingsForm, TrackerForm
 
 import datetime
 import time
@@ -31,10 +31,14 @@ def main(request):
         except ValueError, e:
             return_msg['error'] = 1
             return_msg['msg'] = 'The date was not in the correct format'
-        return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
+        
+        if request.is_ajax():
+            return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
+        else:
+            return HttpResponseRedirect('/')
     else:
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
-        data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL()}
+        data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL(), 'tracker_form' : TrackerForm()}
         settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
         if not settings:
             settings = WeightTrackerSettings(units = 'kgs')

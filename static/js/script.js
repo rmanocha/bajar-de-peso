@@ -1,55 +1,58 @@
-$(document).ready(function() {
-    $('.weight-input').live('dblclick', function() {
-        var weight = $(this).html();
-        cancel_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src','/static/images/cancel.png').click(function() { new_elem.blur(); return false; }));
-        var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); cancel_elem.remove(); });
-        $(this).html(new_elem);
-        new_elem.focus();
-        //UUUUGGGGLLLLYYYY
-        $(this).next().next().next().html(cancel_elem);
-    });
+$('#id_date').datepicker({dateFormat: 'yy-mm-dd'});
+$('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'});
 
-    $('input').live('keypress', function(e) {
-        if(e.keyCode == 13) {
-            var elem = $(this);
-            var date_elem = elem.parent().prev('td');
-            $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
-                function(data) {
-                    elem.parent().html(data.weight);
-                    $('#placeholder').html('');
-                    drawChart();
-            }, 'json');
-            elem.parent().next().next().next().children().remove();
-        }
-    });
-
-    $('#add_prev_date').click(function() {
-        if($('input').length != 0) {
-            alert('Please enter data in the focused field before adding new entries');
-            $('input')[0].focus();
-        } else {
-            $.get('/get_prev_date/', {}, function(data) {
-                var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png')).click(function() { $(this).parent().parent().remove(); return false; });
-                var input_elem = $('<input type="text />');
-                $('#data-table > tbody:last')
-                    .append($('<tr></tr>')
-                        .append($('<td></td>').html(data))
-                        .append($('<td></td>').attr('class', 'weight-input')
-                            .append(input_elem)
-                        )
-                        .append($('<td></td>').attr('id','loss-' + data))
-                        .append($('<td></td>').attr('id', 'avg-' + data))
-                        .append($('<td></td>').append(delete_elem))
-                    );
-                input_elem.focus();
-            });
-        }
-        return false;
-    });
+$('.weight-input').live('dblclick', function() {
+    var weight = $(this).html();
+    cancel_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src','/static/images/cancel.png').click(function() { new_elem.blur(); return false; }));
+    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); cancel_elem.remove(); });
+    $(this).html(new_elem);
+    new_elem.focus();
+    //UUUUGGGGLLLLYYYY
+    $(this).next().next().next().html(cancel_elem);
 });
 
-google.load('visualization', '1', {'packages' : ['linechart']});
-google.setOnLoadCallback(drawChart);
+$('input').live('keypress', function(e) {
+    if(e.keyCode == 13) {
+        var elem = $(this);
+        var date_elem = elem.parent().prev('td');
+        $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
+            function(data) {
+                elem.parent().html(data.weight);
+                $('#placeholder').html('');
+                drawChart();
+        }, 'json');
+        elem.parent().next().next().next().children().remove();
+    }
+});
+
+$('#add_prev_date').click(function() {
+    if($('input').length != 0) {
+        alert('Please enter data in the focused field before adding new entries');
+        $('input')[0].focus();
+    } else {
+        $.get('/get_prev_date/', {}, function(data) {
+            var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png')).click(function() { $(this).parent().parent().remove(); return false; });
+            var input_elem = $('<input type="text />');
+            $('#data-table > tbody:last')
+                .append($('<tr></tr>')
+                    .append($('<td></td>').html(data))
+                    .append($('<td></td>').attr('class', 'weight-input')
+                        .append(input_elem)
+                    )
+                    .append($('<td></td>').attr('id','loss-' + data))
+                    .append($('<td></td>').attr('id', 'avg-' + data))
+                    .append($('<td></td>').append(delete_elem))
+                );
+            input_elem.focus();
+        });
+    }
+    return false;
+});
+
+if($('#placeholder').length) {
+    google.load('visualization', '1', {'packages' : ['linechart']});
+    google.setOnLoadCallback(drawChart);
+}
 
 function drawChart() {
     var data = new google.visualization.DataTable();
@@ -75,6 +78,6 @@ function drawChart() {
         }
         $('#placeholder').html('');
         var chart = new google.visualization.LineChart(document.getElementById('placeholder'));
-        chart.draw(data, {width: 600, height: 300, title : 'My Weight Tracker'});
+        chart.draw(data, {width: 540, height: 270, title : 'My Weight Tracker'});
     });
 }

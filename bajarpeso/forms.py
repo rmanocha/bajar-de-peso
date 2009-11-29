@@ -3,7 +3,15 @@ from google.appengine.ext.db import djangoforms
 
 from django import forms
 
-from bajarpeso.models import WeightTrackerSettings
+from bajarpeso.models import WeightTracker, WeightTrackerSettings
+
+class TrackerForm(djangoforms.ModelForm):
+    date = forms.DateField(required = True, widget = forms.TextInput(attrs = {'size' : 10}))
+    weight = forms.FloatField(required = True, widget = forms.TextInput(attrs = {'size' : 5}))
+
+    class Meta:
+        model = WeightTracker
+        exclude = ['user']
 
 class SettingsForm(djangoforms.ModelForm):
     units = forms.ChoiceField(required = True, label = 'Units', choices = (('lbs', 'Pounds'), ('kgs', 'Kilograms')))
