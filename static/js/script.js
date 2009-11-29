@@ -1,14 +1,22 @@
 $('#id_date').datepicker({dateFormat: 'yy-mm-dd', maxDate: '+0d'});
-$('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'});
-
-$('#add_prev_date').qtip({
-    content: "This link will add the date before the LAST date you've already made an entry for.",
+$('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'}).qtip({
+    content: 'How soon do you wanna reach your target weight?',
     style: {
         name: 'cream',
         tip: 'topLeft'
-    },
-    show: 'mouseover',
-    hide: 'mouseout'
+    },    
+    show: 'focus',
+    hide: 'blur'
+});
+
+$('#id_target_weight').qtip({
+    content: 'How light do you wanna be?',
+    style: {
+        name: 'cream',
+        tip: 'topLeft'
+    },    
+    show: 'focus',
+    hide: 'blur'
 });
 
 $('.weight-input').live('dblclick', function() {
@@ -19,6 +27,16 @@ $('.weight-input').live('dblclick', function() {
     new_elem.focus();
     //UUUUGGGGLLLLYYYY
     $(this).next().next().next().html(cancel_elem);
+}).each(function() {
+    $(this).qtip({
+        content: 'Double click to edit this entry',
+        style: {
+            name: 'cream',
+            tip: 'topLeft'
+        },
+        show: 'mouseover',
+        hide: 'mouseout'
+    });
 });
 
 $('input').live('keypress', function(e) {
@@ -37,36 +55,12 @@ $('input').live('keypress', function(e) {
     }
 });
 
-$('#add_prev_date').click(function() {
-    if($('input').length != 0) {
-        alert('Please enter data in the focused field before adding new entries');
-        $('input')[0].focus();
-    } else {
-        $.get('/get_prev_date/', {}, function(data) {
-            var delete_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src', '/static/images/delete.png')).click(function() { $(this).parent().parent().remove(); return false; });
-            var input_elem = $('<input type="text />');
-            $('#data-table > tbody:last')
-                .append($('<tr></tr>')
-                    .append($('<td></td>').html(data))
-                    .append($('<td></td>').attr('class', 'weight-input')
-                        .append(input_elem)
-                    )
-                    .append($('<td></td>').attr('id','loss-' + data))
-                    .append($('<td></td>').attr('id', 'avg-' + data))
-                    .append($('<td></td>').append(delete_elem))
-                );
-            input_elem.focus();
-        });
-    }
-    return false;
-});
-
-if($('#placeholder').length) {
-    google.load('visualization', '1', {'packages' : ['linechart']});
-    google.setOnLoadCallback(drawChart);
-}
+google.load('visualization', '1', {'packages' : ['linechart']});
+google.setOnLoadCallback(drawChart);
 
 function drawChart() {
+    if($('#placeholder').length == 0)
+        return
     var data = new google.visualization.DataTable();
     $.getJSON('/get_chart_data/', {}, function(weight_data) {
         data.addColumn('string', 'Date');
