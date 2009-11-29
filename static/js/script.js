@@ -73,6 +73,7 @@ function drawChart() {
             }
             $('#loss-' + weight_data.data[i][0]).html((i > 0) ? Math.round((weight_data.data[i][1] - weight_data.data[i - 1][1])*100)/100 : 'N/A');
         }
+        $('#placeholder').html('');
         var chart = new google.visualization.LineChart(document.getElementById('placeholder'));
         chart.draw(data, {width: 600, height: 300, title : 'My Weight Tracker'});
     });
