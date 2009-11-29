@@ -6,6 +6,8 @@ from django import forms
 from bajarpeso.models import WeightTrackerSettings
 
 class SettingsForm(djangoforms.ModelForm):
+    units = forms.ChoiceField(required = True, label = 'Units', choices = (('lbs', 'Pounds'), ('kgs', 'Kilograms')))
+
     def clean(self):
         cleaned_data = self.cleaned_data
         target_date = cleaned_data.get('target_date', '')
