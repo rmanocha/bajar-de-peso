@@ -53,8 +53,8 @@ function drawChart() {
     var data = new google.visualization.DataTable();
     $.getJSON('/get_chart_data/', {}, function(weight_data) {
         data.addColumn('string', 'Date');
-        data.addColumn('number', 'Weight (kgs)');
-        data.addColumn('number', 'Moving Avg. (kgs)');
+        data.addColumn('number', 'Weight (' + weight_units + ')');
+        data.addColumn('number', 'Moving Avg. (' + weight_units + ')');
         data.addRows(weight_data.data.length);
         for(var i = 0; i < weight_data.data.length; i++) {
             data.setCell(i, 0, weight_data.data[i][0]);
