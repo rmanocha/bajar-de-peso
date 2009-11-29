@@ -19,6 +19,7 @@ $(document).ready(function() {
                     $('#placeholder').html('');
                     drawChart();
             }, 'json');
+            elem.parent().next().next().next().children().remove();
         }
     });
 
