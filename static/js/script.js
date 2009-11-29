@@ -32,10 +32,10 @@ $(document).ready(function() {
                         .append($('<td></td>').html(data))
                         .append($('<td></td>').attr('class', 'weight-input')
                             .append(input_elem)
-                            .append(delete_elem)
                         )
                         .append($('<td></td>').attr('id','loss-' + data))
                         .append($('<td></td>').attr('id', 'avg-' + data))
+                        .append($('<td></td>').append(delete_elem))
                     );
                 input_elem.focus();
             });
