@@ -1,4 +1,4 @@
-$('#id_date').datepicker({dateFormat: 'yy-mm-dd'});
+$('#id_date').datepicker({dateFormat: 'yy-mm-dd', maxDate: '+0d'});
 $('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'});
 
 $('.weight-input').live('dblclick', function() {
