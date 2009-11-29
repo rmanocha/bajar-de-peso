@@ -14,7 +14,7 @@ $('#add_prev_date').qtip({
 $('.weight-input').live('dblclick', function() {
     var weight = $(this).html();
     cancel_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src','/static/images/cancel.png').click(function() { new_elem.blur(); return false; }));
-    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); cancel_elem.remove(); });
+    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); $(this).remove(); cancel_elem.remove(); });
     $(this).html(new_elem);
     new_elem.focus();
     //UUUUGGGGLLLLYYYY
@@ -31,9 +31,9 @@ $('input').live('keypress', function(e) {
                     elem.parent().html(data.weight);
                     $('#placeholder').html('');
                     drawChart();
-                }
+                } //something needs to happen here
         }, 'json');
-        elem.parent().next().next().next().children().remove();
+        elem.parent().next().next().next().children().remove(); //removing the cancel image
     }
 });
 
