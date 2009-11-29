@@ -54,3 +54,7 @@ img#delete-img {
     border: none;
     margin-left: 30px;
 }
+
+div.spacer div {
+    margin-bottom: 10px;
+}
