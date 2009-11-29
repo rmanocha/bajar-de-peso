@@ -1,7 +1,7 @@
 # Create your views here.
 from google.appengine.api import users
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 
@@ -39,6 +39,7 @@ def main(request):
         if not settings:
             settings = WeightTrackerSettings(units = 'kgs')
             settings.put()
+            return HttpResponseRedirect('/settings/')
         data_dict['units'] = settings.units
 
         #Need to put this try/except block in case no entries for 'this' user have been created
@@ -70,7 +71,7 @@ def edit_settings(request):
             item = form.save(commit = False)
             item.user = users.get_current_user()
             item.put()
-            return HttpResponse('Thanks for editing your settings')
+            return HttpResponseRedirect('/settings/')
     else:
         form = SettingsForm(instance = user_settings)
 
