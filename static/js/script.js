@@ -1,13 +1,11 @@
 $(document).ready(function() {
-    function bindInput() {
-        $('.weight-input').dblclick(function() {
-            var weight = $(this).html();
-            var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); });
-            $(this).html(new_elem);
-            new_elem.focus();
-        });
-    }
-    bindInput();
+    $('.weight-input').live('dblclick', function() {
+        var weight = $(this).html();
+        var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); });
+        $(this).html(new_elem);
+        new_elem.focus();
+    });
+
     $('input').live('keypress', function(e) {
         if(e.keyCode == 13) {
             var elem = $(this);
@@ -20,6 +18,7 @@ $(document).ready(function() {
             }, 'json');
         }
     });
+
     $('#add_prev_date').click(function() {
         if($('input').length != 0) {
             alert('Please enter data in the focused field before adding new entries');
@@ -39,7 +38,6 @@ $(document).ready(function() {
                         .append($('<td></td>').attr('id', 'avg-' + data))
                     );
                 input_elem.focus();
-                bindInput();
             });
         }
         return false;
