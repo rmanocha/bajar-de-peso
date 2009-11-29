@@ -1,6 +1,16 @@
 $('#id_date').datepicker({dateFormat: 'yy-mm-dd', maxDate: '+0d'});
 $('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'});
 
+$('#add_prev_date').qtip({
+    content: "This link will add the date before the LAST date you've already made an entry for.",
+    style: {
+        name: 'cream',
+        tip: 'topLeft'
+    },
+    show: 'mouseover',
+    hide: 'mouseout'
+});
+
 $('.weight-input').live('dblclick', function() {
     var weight = $(this).html();
     cancel_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src','/static/images/cancel.png').click(function() { new_elem.blur(); return false; }));
@@ -17,9 +27,11 @@ $('input').live('keypress', function(e) {
         var date_elem = elem.parent().prev('td');
         $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
             function(data) {
-                elem.parent().html(data.weight);
-                $('#placeholder').html('');
-                drawChart();
+                if(data.error == 0) {
+                    elem.parent().html(data.weight);
+                    $('#placeholder').html('');
+                    drawChart();
+                }
         }, 'json');
         elem.parent().next().next().next().children().remove();
     }
