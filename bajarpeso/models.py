@@ -13,6 +13,7 @@ class WeightTrackerSettings(db.Model):
     units = db.StringProperty(required = True, choices = set(["lbs","kgs"]))
     target_weight = db.FloatProperty(required = False)
     target_date = db.DateProperty(required = False)
+    height = db.IntegerProperty(required = False)
 
     def __str__(self):
         return "Using %s for %s" % (self.units, self.user.nickname())

@@ -79,3 +79,13 @@ div.failure {
 div.bot-margin {
     margin-bottom: 10px;
 }
+
+div#stats {
+    background-color: #e5e5e6;
+    padding: 5px;
+    font-size: .7em;
+}
+
+div.top-margin-8 {
+    margin-top: 8px;
+}

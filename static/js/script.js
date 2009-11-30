@@ -5,12 +5,22 @@ $('#id_target_date').datepicker({dateFormat: 'yy-mm-dd'}).qtip({
         name: 'cream',
         tip: 'topLeft'
     },    
-    show: 'focus',
-    hide: 'blur'
+    show: 'mouseover',
+    hide: 'mouseout'
 });
 
 $('#id_target_weight').qtip({
     content: 'How light do you wanna be?',
+    style: {
+        name: 'cream',
+        tip: 'topLeft'
+    },    
+    show: 'focus',
+    hide: 'blur'
+});
+
+$('#id_height').qtip({
+    content: 'Your height (in cms). This is used to calculate your BMI.',
     style: {
         name: 'cream',
         tip: 'topLeft'

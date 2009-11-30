@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% block stats %} {% endblock %}
+{% block messages %} {% endblock %}
 {% block content %}
 <div class="grid_16">
 <form method="post" action="/settings/">
@@ -6,9 +8,11 @@
         <div>{{ form.units.label }}</div>
         <div>{{ form.target_weight.label }}</div>
         <div>{{ form.target_date.label }}</div>
+        <div>{{ form.height.label }} (in cms)</div>
         <div><input type="submit" value="Submit" /></div>
     </div>
     <div class="grid_1 spacer">
+        <div>:</div>
         <div>:</div>
         <div>:</div>
         <div>:</div>
@@ -17,6 +21,7 @@
         <div>{{ form.units }}</div>
         <div>{{ form.target_weight }}</div>
         <div>{{ form.target_date }}</div>
+        <div>{{ form.height }}</div>
     </div>
 </form>
 </div>

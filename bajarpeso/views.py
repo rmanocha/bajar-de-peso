@@ -10,8 +10,45 @@ from bajarpeso.forms import SettingsForm, TrackerForm
 
 import datetime
 import time
+import math
 
 GET_LOGOUT_URL = lambda : users.create_logout_url('/')
+
+def get_bmi(settings, latest_entry):
+    if not latest_entry:
+        return 'Make an entry below'
+
+    if settings.height:
+        if settings.units == 'lbs':
+            bmi = (latest_entry.weight * 703)/math.pow((settings.height/2.54), 2)
+        else:
+            bmi = latest_entry.weight/math.pow((settings.height/100.0), 2)
+
+        bmi = '%.2f' % bmi
+        return bmi
+    else:
+        return 'Enter your height in the settings page'
+
+def get_weight_time_lost(settings, all_data):
+    latest_entry = all_data.get()
+    if not latest_entry:
+        return ('Make an entry below', 'Make an entry below', 'Make an entry below', 'Make an entry below')
+
+    if settings.target_date:
+        days_left = (settings.target_date - latest_entry.date).days
+        weight_left =  settings.target_weight - latest_entry.weight
+        req_rate = weight_left/days_left
+        req_rate = '%.2f' % req_rate
+    else:
+        days_left, weight_left, req_rate = ('Edit your settings', )*3
+
+    first_entry = all_data[all_data.count() - 1]
+    if first_entry.date == datetime.date.today():
+        current_rate = 'N/A'
+    else:
+        current_rate = (latest_entry.weight - first_entry.weight)/(datetime.date.today() - first_entry.date).days
+    return days_left, weight_left, req_rate, current_rate
+
 
 def main(request):
     if request.method == 'POST':
@@ -45,6 +82,8 @@ def main(request):
             settings.put()
             return HttpResponseRedirect('/settings/')
         data_dict['units'] = settings.units
+        data_dict['bmi'] = get_bmi(settings, all_data.get())
+        data_dict['days_left'], data_dict['weight_left'], data_dict['req_rate'], data_dict['cur_rate'] = get_weight_time_lost(settings, all_data)
 
         #Need to put this try/except block in case no entries for 'this' user have been created
         try:
