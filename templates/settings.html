@@ -32,10 +32,10 @@
         <div>{{ form.height }}</div>
     </div>
     <div class="grid_10 omega spacer">
-        <div {% if form.target_date.errors %}class="failure"{% endif %}>{% for error in form.units.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
-        <div {% if form.target_date.errors %}class="failure"{% endif %}>{% for error in form.target_weight.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
+        <div {% if form.units.errors %}class="failure"{% endif %}>{% for error in form.units.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
+        <div {% if form.target_weight.errors %}class="failure"{% endif %}>{% for error in form.target_weight.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
         <div {% if form.target_date.errors %}class="failure"{% endif %}>{% for error in form.target_date.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
-        <div {% if form.target_date.errors %}class="failure"{% endif %}>{% for error in form.height.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
+        <div {% if form.height.errors %}class="failure"{% endif %}>{% for error in form.height.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
     </div>
 </form>
 </div>
