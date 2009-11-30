@@ -96,9 +96,6 @@ def main(request):
 def get_chart_data(request):
     all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
     data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
-    #This seems like a Hack. There needs to be a better way of doing things.
-    #for i in range(5, all_data.count() + 1):
-    #    data_dict['data'][i - 1].append(sum(map(lambda l: l.weight, all_data[i - 5:i]))/5)
     return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
 
 def edit_settings(request):
