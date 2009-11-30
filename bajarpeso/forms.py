@@ -16,17 +16,17 @@ class TrackerForm(djangoforms.ModelForm):
 class SettingsForm(djangoforms.ModelForm):
     units = forms.ChoiceField(required = True, label = 'Units', choices = (('lbs', 'Pounds'), ('kgs', 'Kilograms')))
 
-    def clean(self):
+    def clean_target_date(self):
         cleaned_data = self.cleaned_data
         target_date = cleaned_data.get('target_date', '')
         target_weight = cleaned_data.get('target_weight', '')
 
         if target_date and target_weight:
-            return cleaned_data
+            return target_date
         elif not target_date and not target_weight:
-            return cleaned_data
+            return target_date
         else:
-            raise forms.ValidationError('You have to enter both target date and target weight. You have only entered one')
+            raise forms.ValidationError('You have to enter both target date and target weight. You have only entered one.')
 
     class Meta:
         model = WeightTrackerSettings
