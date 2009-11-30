@@ -78,9 +78,9 @@ def main(request):
         data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL(), 'tracker_form' : TrackerForm()}
         settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
         if not settings:
-            settings = WeightTrackerSettings(units = 'kgs')
-            settings.put()
-            return HttpResponseRedirect('/settings/')
+            #settings = WeightTrackerSettings(units = 'kgs')
+            #settings.put()
+            return HttpResponseRedirect('/settings/?first')
         data_dict['units'] = settings.units
         data_dict['bmi'] = get_bmi(settings, all_data.get())
         data_dict['days_left'], data_dict['weight_left'], data_dict['req_rate'], data_dict['cur_rate'] = get_weight_time_lost(settings, all_data)
@@ -103,14 +103,21 @@ def get_chart_data(request):
 
 def edit_settings(request):
     user_settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
+    get_vars = request.GET.copy()
+    msg = ''
+
     if request.method == 'POST':
         form = SettingsForm(request.POST, instance = user_settings)
         if form.is_valid():
             item = form.save(commit = False)
             item.user = users.get_current_user()
             item.put()
-            return HttpResponseRedirect('/settings/')
+            return HttpResponseRedirect('/settings/?success')
     else:
+        if get_vars.get('first') is not None:
+            msg = 'Welcome. Looks like this is your first time here. Please enter some of your details so we can better track your progress.'
+        elif get_vars.get('success') is not None:
+            msg = 'Settings saved succesfully. You can now go and start entering your weight'
         form = SettingsForm(instance = user_settings)
 
-    return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL()});
+    return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL(), 'msg' : msg})

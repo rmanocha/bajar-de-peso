@@ -64,6 +64,7 @@ div#navbar a {
 
 div#msg {
     padding: .3em;
+    font-size: .8em;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
 }
@@ -74,6 +75,10 @@ div.success {
 
 div.failure {
     background-color: red;
+}
+
+div.msg {
+    background-color: #F6F59B;
 }
 
 div.bot-margin {

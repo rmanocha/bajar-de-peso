@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% block stats %} {% endblock %}
-{% block messages %} {% endblock %}
+
 {% block content %}
 <div class="grid_16">
+    {% if msg %}
+        <div class="grid_16 text-center">
+            <div class="grid_3 alpha">&nbsp;</div>
+            <div id="msg" class="grid_10 msg">{{ msg }}</div>
+            <div class="grid_3 omega">&nbsp;</div>
+        </div>
+    {% endif %}
 <form method="post" action="/settings/">
     <div class="grid_2 alpha spacer">
         <div>{{ form.units.label }}</div>
