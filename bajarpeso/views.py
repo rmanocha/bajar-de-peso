@@ -115,7 +115,7 @@ def edit_settings(request):
         if get_vars.get('first') is not None:
             msg = 'Welcome. Looks like this is your first time here. Please enter some of your details so we can better track your progress.'
         elif get_vars.get('success') is not None:
-            msg = 'Settings saved succesfully. You can now go and start entering your weight'
+            msg = 3
         form = SettingsForm(instance = user_settings)
 
     return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL(), 'msg' : msg})

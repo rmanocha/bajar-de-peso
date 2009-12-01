@@ -6,7 +6,13 @@
     {% if msg %}
         <div class="grid_16 text-center">
             <div class="grid_3 alpha">&nbsp;</div>
-            <div id="msg" class="grid_10 msg">{{ msg }}</div>
+            <div id="msg" class="grid_10 msg">
+                {% ifequal msg 3 %}
+                    Settings saved succesfully. You can now go and start <a href="/">entering your weight</a>.
+                {% else %}
+                    {{ msg }}
+                {% endifequal %}
+            </div>
             <div class="grid_3 omega">&nbsp;</div>
         </div>
     {% endif %}
