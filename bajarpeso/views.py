@@ -47,6 +47,7 @@ def get_weight_time_lost(settings, all_data):
         current_rate = 'N/A'
     else:
         current_rate = (latest_entry.weight - first_entry.weight)/(datetime.date.today() - first_entry.date).days
+        current_rate = '%.2f' % current_rate
     return days_left, weight_left, req_rate, current_rate
 
 
