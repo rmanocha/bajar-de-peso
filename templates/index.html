@@ -18,7 +18,6 @@
                         <th>Weight ({{ units }})</th>
                         <th>Loss</th>
                         <th>Avg.</th>
-                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,7 +27,6 @@
                             <td class="weight-input"><input type="text" /></td>
                             <td id="loss-{{ today }}">N/A</td>
                             <td id="avg-{{ today }}">N/A</td>
-                            <td id="extra-{{ today }}"></td>
                         </tr>
                     {% endif %}
                     {% for entry in data %}
@@ -37,7 +35,6 @@
                             <td class="weight-input">{{ entry.weight }}</td>
                             <td id="loss-{{ entry.date }}"></td>
                             <td id="avg-{{ entry.date }}"></td>
-                            <td id="extra-{{ entry.date }}"></td>
                         </tr>
                     {% endfor %}
                 </tbody>

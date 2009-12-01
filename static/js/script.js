@@ -31,12 +31,9 @@ $('#id_height').qtip({
 
 $('.weight-input').live('dblclick', function() {
     var weight = $(this).html();
-    cancel_elem = $('<a></a>').attr('href','#').append($('<img />').attr('src','/static/images/cancel.png').click(function() { new_elem.blur(); return false; }));
-    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); $(this).remove(); cancel_elem.remove(); });
+    var new_elem = $('<input type="text" />').val(weight).blur(function() { $(this).parent().html(weight); $(this).remove(); });
     $(this).html(new_elem);
     new_elem.focus();
-    //UUUUGGGGLLLLYYYY
-    $(this).next().next().next().html(cancel_elem);
 }).each(function() {
     $(this).qtip({
         content: 'Double click to edit this entry',
