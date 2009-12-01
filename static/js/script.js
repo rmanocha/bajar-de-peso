@@ -52,8 +52,8 @@ $('.weight-input').live('dblclick', function() {
 $('input').live('keypress', function(e) {
     if(e.keyCode == 13) {
         var elem = $(this);
-        var date_elem = elem.parent().prev('td');
-        $.post('/', {'date' : date_elem.html(), 'weight' : elem.val()},
+        var date_elem = elem.parent().prev('td').find('input')[0].value;
+        $.post('/', {'date' : date_elem, 'weight' : elem.val()},
             function(data) {
                 if(data.error == 0) {
                     elem.parent().html(data.weight);
