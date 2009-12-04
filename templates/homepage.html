@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block navbar %} {% endblock %}
+{% block stats %} {% endblock %}
+{% block content %}
+	<div class="grid_8">
+		<p>Bajar de peso (or "Lose Weight" according to Google Translate) is a web based application that helps you track your weight. It is a web interface to the excellent spreadsheet <a href="http://jeremy.zawodny.com/blog/">Jeremy Zawodny</a> <a href="http://jeremy.zawodny.com/blog/archives/006851.html">created</a>. I've been using this spreadsheet to track my progress and thought it might help developing something like this for the web could help others. It also gave me an excellent opportunity to learn Google's App Engine and it's infrastructure.</p>
+		<ul>
+			<li><span style="font-weight: bold;">What?</span>
+				<ul>
+					<li>Web based clone of <a href="http://jeremy.zawodny.com/blog/archives/006851.html">Jeremy Zawodny's Diet Spreadsheet</a>.</li>
+					<li>Allows you to track your weight on a daily basis.</li>
+					<li>Shows a moving average of your weight.</li>
+					<li>Interactive graph of your daily weight as well as your moving average.</li>
+					<li>Customizable units (Pounds or Kilograms).</li>
+					<li>Enter your height to calculate your daily BMI.</li>
+					<li>Enter a target date and weight so that we can tell you what the required rate of daily loss is for you to reach your target weight.</li>
+				</ul>
+			</li>
+			<li><span style="font-weight: bold;">Why?</span>
+				<ul>
+					<li>To utilise all the benefits a web interface has over a local spreadsheet.</li>
+					<li>Tracking your weight daily will let you know how you need to adjust your eating/workout patterns.</li>
+					<li>It will, hopefully, make you more aware of your eating habits.</li>
+					<li>It gave me a chance to learn Google's App Engine Infrastructure.</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div class="grid_8">
+		<a href="/static/images/sshot.png"><img src="/static/images/sshot.png" alt="Bajar De Peso Screenshot" width="480" /></a>
+	</div>
+{% endblock %}
