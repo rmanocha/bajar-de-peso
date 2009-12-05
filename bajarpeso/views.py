@@ -4,9 +4,11 @@ from google.appengine.api import users
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils import simplejson
+from django.views.generic.simple import direct_to_template
 
 from bajarpeso.models import WeightTracker, WeightTrackerSettings
 from bajarpeso.forms import SettingsForm, TrackerForm
+from bajarpeso.decorators import login_required
 
 import datetime
 import time
@@ -52,11 +54,15 @@ def get_weight_time_lost(settings, all_data):
 
 
 def main(request):
+    user = users.get_current_user()
+    if not user:
+        return direct_to_template(request, template = 'homepage.html', extra_context = {'login_url' : users.create_login_url(request.get_full_path())})
+
     if request.method == 'POST':
         return_msg = {}
         try:
             date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
-            tracker = WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get()
+            tracker = WeightTracker.all().filter('user = ', user).filter('date = ', date).get()
             if tracker:
                 tracker.weight = float(request.POST['weight'])
                 tracker.put()
@@ -75,12 +81,10 @@ def main(request):
         else:
             return HttpResponseRedirect('/')
     else:
-        all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('-date')
+        all_data = WeightTracker.all().filter('user = ', user).order('-date')
         data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL(), 'tracker_form' : TrackerForm()}
-        settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
+        settings = WeightTrackerSettings.all().filter('user = ', user).get()
         if not settings:
-            #settings = WeightTrackerSettings(units = 'kgs')
-            #settings.put()
             return HttpResponseRedirect('/settings/?first')
         data_dict['units'] = settings.units
         data_dict['bmi'] = get_bmi(settings, all_data.get())
@@ -94,11 +98,13 @@ def main(request):
             data_dict['today'] = datetime.date.today()
         return render_to_response('index.html', data_dict)
 
+@login_required
 def get_chart_data(request):
     all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
     data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
     return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
 
+@login_required
 def edit_settings(request):
     user_settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
     get_vars = request.GET.copy()
