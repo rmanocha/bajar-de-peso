@@ -1,7 +1,7 @@
 # Create your views here.
 from google.appengine.api import users
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.views.generic.simple import direct_to_template
@@ -100,9 +100,13 @@ def main(request):
 
 @login_required
 def get_chart_data(request):
-    all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
-    data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
-    return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
+    if request.is_ajax():
+        all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
+        data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
+        return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
+    else:
+        return HttpResponseForbidden('You are not allowed to view this URL')
+
 
 @login_required
 def edit_settings(request):
