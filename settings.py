@@ -16,7 +16,8 @@
 
 import os
 
-DEBUG = True
+#Bummed from rietveld
+DEBUG = os.environ.get('SERVER_SOFTWARE').startswith('Dev')
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
