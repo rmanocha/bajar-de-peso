@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block messages %} {% endblock %}
+{% block stats %}
+    <div class="grid_16" id="stats">
+        <div class="grid_3 alpha">Your BMI : {{ bmi }}</div>
+        <div class="grid_3">Days left : {{ days_left }}</div>
+        <div class="grid_3">Weight loss left ({{ units }}): {{ weight_left }}</div>
+        <div class="grid_3">Required rate ({{ units }}/day): {{ req_rate }}</div>
+        <div class="grid_4 omega">Current rate ({{ units }}/day): {{ cur_rate }}</div>
+    </div>
+{% endblock %}
 {% block content %}
         <div class="grid_6">
             <div class="grid_6 bot-margin top-margin-8">
