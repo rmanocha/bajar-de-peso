@@ -129,3 +129,12 @@ def edit_settings(request):
         form = SettingsForm(instance = user_settings)
 
     return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL(), 'msg' : msg})
+
+@login_required
+def delete_data(request):
+    if request.is_ajax():
+        WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', request.POST['date']).delete()
+        return HttpResponse('Delete successful')
+    else:
+        return HttpResponseForbidden('You are not allowed to view this URL')
+
