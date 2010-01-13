@@ -46,6 +46,16 @@ $('.weight-input').live('dblclick', function() {
     });
 });
 
+$('.delete-entry').live('click', function() {
+    date = $(this).parent().find('input')[0].value;
+    console.log('abt to delete for ' + date);
+    $.post('/delete_data/', {'date' : date},
+        function(data) {
+            $(this).parent().slideUp('slow', function() { $(this).remove(); });
+        }
+    );
+});
+
 $('input').live('keypress', function(e) {
     if(e.keyCode == 13) {
         var elem = $(this);

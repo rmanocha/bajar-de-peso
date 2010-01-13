@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     #(r'^home/$', 'django.views.generic.simple.direct_to_template', {'template': 'homepage.html'}),
     (r'^settings/$', 'bajarpeso.views.edit_settings'),
     (r'^get_chart_data/$', 'bajarpeso.views.get_chart_data'),
+    (r'^delete_data/$', 'bajarpeso.views.delete_data'),
 )
