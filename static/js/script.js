@@ -49,10 +49,10 @@ $('.weight-input').live('dblclick', function() {
 $('.delete-entry').live('click', function() {
     tr_elem = $(this).parent();
     date = tr_elem.find('input')[0].value;
-    console.log('abt to delete for ' + date);
     $.post('/delete_data/', {'date' : date},
         function(data) {
             tr_elem.slideUp('slow', function() { $(this).remove(); });
+            drawChart();
         }
     );
 });
@@ -69,7 +69,6 @@ $('input').live('keypress', function(e) {
                     drawChart();
                 } //something needs to happen here
         }, 'json');
-        elem.parent().next().next().next().children().remove(); //removing the cancel image
     }
 });
 
