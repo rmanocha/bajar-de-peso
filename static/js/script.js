@@ -47,11 +47,12 @@ $('.weight-input').live('dblclick', function() {
 });
 
 $('.delete-entry').live('click', function() {
-    date = $(this).parent().find('input')[0].value;
+    tr_elem = $(this).parent();
+    date = tr_elem.find('input')[0].value;
     console.log('abt to delete for ' + date);
     $.post('/delete_data/', {'date' : date},
         function(data) {
-            $(this).parent().slideUp('slow', function() { $(this).remove(); });
+            tr_elem.slideUp('slow', function() { $(this).remove(); });
         }
     );
 });
