@@ -47,7 +47,8 @@ $('.weight-input').live('dblclick', function() {
 });
 
 $('.delete-entry').live('click', function() {
-    tr_elem = $(this).parent();
+    //We need three calls to 'parent' to get to the top level 'tr'
+    tr_elem = $(this).parent().parent().parent();
     date = tr_elem.find('input')[0].value;
     $.post('/delete_data/', {'date' : date},
         function(data) {
@@ -55,6 +56,7 @@ $('.delete-entry').live('click', function() {
             drawChart();
         }
     );
+    return false;
 });
 
 $('input').live('keypress', function(e) {
