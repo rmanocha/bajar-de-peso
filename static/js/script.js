@@ -75,12 +75,14 @@ $('input').live('keypress', function(e) {
 });
 
 $('#clear-all').click(function() {
-	$.post('/delete_data/', {},
-		function(data) {
-			$('#data-table > tbody').slideUp('slow', function() { $(this).remove(); });
-			drawChart();
-		}
-	);
+	if(confirm('Are you sure you want to delete all your data?')) {
+		$.post('/delete_data/', {},
+			function(data) {
+				$('#data-table > tbody').slideUp('slow', function() { $(this).remove(); });
+				drawChart();
+			}
+		);
+	}
 });
 
 google.load('visualization', '1', {'packages' : ['linechart']});
