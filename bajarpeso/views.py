@@ -52,6 +52,9 @@ def get_weight_time_lost(settings, all_data):
         current_rate = '%.2f' % current_rate
     return days_left, weight_left, req_rate, current_rate
 
+@login_required(False)
+def big_graph(request):
+    return direct_to_template(request, template = 'big-graph.html', extra_context = {'units' : WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get().units})
 
 def main(request):
     user = users.get_current_user()
