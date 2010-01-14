@@ -133,8 +133,12 @@ def edit_settings(request):
 @login_required
 def delete_data(request):
     if request.is_ajax() and request.method == 'POST':
-        date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
-        WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get().delete()
+        if hasattr(request.POST, 'date'):
+            date = datetime.date.fromtimestamp(time.mktime(time.strptime(request.POST['date'], '%Y-%m-%d')))
+            WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get().delete()
+        else:
+            from google.appengine.ext import db
+            db.delete(WeightTracker.all().filter('user = ', users.get_current_user()))
         return HttpResponse('Delete successful')
     else:
         return HttpResponseForbidden('You are not allowed to view this URL')

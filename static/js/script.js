@@ -74,6 +74,15 @@ $('input').live('keypress', function(e) {
     }
 });
 
+$('#clear-all').click(function() {
+	$.post('/delete_data/', {},
+		function(data) {
+			$('#data-table > tbody').slideUp('slow', function() { $(this).remove(); });
+			drawChart();
+		}
+	);
+});
+
 google.load('visualization', '1', {'packages' : ['linechart']});
 google.setOnLoadCallback(drawChart);
 
