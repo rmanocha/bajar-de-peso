@@ -84,6 +84,7 @@ def main(request):
         all_data = WeightTracker.all().filter('user = ', user).order('-date')
         data_dict = {'data' : all_data, 'logout_url' : GET_LOGOUT_URL(), 'tracker_form' : TrackerForm()}
         settings = WeightTrackerSettings.all().filter('user = ', user).get()
+        #We need this here as well as in login_required 'cause that decorator is not called for this view.
         if not settings:
             return HttpResponseRedirect('/settings/?first')
         data_dict['units'] = settings.units
@@ -98,7 +99,7 @@ def main(request):
             data_dict['today'] = datetime.date.today()
         return render_to_response('index.html', data_dict)
 
-@login_required
+@login_required(False)
 def get_chart_data(request):
     if request.is_ajax():
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
@@ -108,7 +109,7 @@ def get_chart_data(request):
         return HttpResponseForbidden('You are not allowed to view this URL')
 
 
-@login_required
+@login_required(True)
 def edit_settings(request):
     user_settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
     get_vars = request.GET.copy()
@@ -130,7 +131,7 @@ def edit_settings(request):
 
     return render_to_response('settings.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL(), 'msg' : msg})
 
-@login_required
+@login_required(False)
 def delete_data(request):
     if request.is_ajax() and request.method == 'POST':
         if 'date' in request.POST:
