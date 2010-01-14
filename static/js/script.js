@@ -114,6 +114,6 @@ function drawChart() {
         }
         $('#placeholder').html('');
         var chart = new google.visualization.LineChart(document.getElementById('placeholder'));
-        chart.draw(data, {width: 540, height: 270, title : 'My Weight Tracker'});
+        chart.draw(data, {title : 'Weight Tracker'});
     });
 }
