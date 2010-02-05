@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+    <div class="grid_16 spacer text-center">
+        <input type="button" value="Show all data" id="show-all-button" />
+        <input type="hidden" value="{{ chart_max }}" id="chart-max-data" />
+    </div>
     <div class="grid_16">
         <div id="placeholder" style="width: 960px; height: 480px;"><img src="/static/images/loading.gif" alt="Loading" /></div>
     </div>

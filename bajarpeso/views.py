@@ -55,7 +55,8 @@ def get_weight_time_lost(settings, all_data):
 
 @login_required(False)
 def big_graph(request):
-    return direct_to_template(request, template = 'big-graph.html', extra_context = {'units' : WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get().units})
+    settings = WeightTrackerSettings.all().filter('user = ', users.get_current_user()).get()
+    return direct_to_template(request, template = 'big-graph.html', extra_context = {'units' : settings.units, 'chart_max' : settings.chart_max})
 
 def main(request):
     user = users.get_current_user()

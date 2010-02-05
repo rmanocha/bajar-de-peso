@@ -85,32 +85,50 @@ $('#clear-all').click(function() {
 	}
 });
 
+$('#show-all-button').toggle(function() {
+    show_all = true;
+    $(this).attr('value', 'Show latest ' + $('#chart-max-data').val() + ' entries');
+    drawChart();
+}, function() {
+    show_all = false;
+    $(this).attr('value', 'Show all data');
+    drawChart();
+});
+
 google.load('visualization', '1', {'packages' : ['linechart']});
 google.setOnLoadCallback(drawChart);
 
 function drawChart() {
     if($('#placeholder').length == 0)
         return
+
     var data = new google.visualization.DataTable();
     $.getJSON('/get_chart_data/', {}, function(weight_data) {
         data.addColumn('string', 'Date');
         data.addColumn('number', 'Weight (' + weight_units + ')');
         data.addColumn('number', 'Moving Avg. (' + weight_units + ')');
-        data.addRows((weight_data.chart_max < weight_data.data.length) ? weight_data.chart_max : weight_data.data.length);
+        if(show_all)
+            data.addRows(weight_data.data.length);
+        else
+            data.addRows((weight_data.chart_max < weight_data.data.length) ? weight_data.chart_max : weight_data.data.length);
         counter = 0;
         for(var i = 0; i < weight_data.data.length; i++) {
-            if(i > weight_data.data.length - weight_data.chart_max) {
-                data.setCell(counter, 0, weight_data.data[i][0]);
-                data.setCell(counter, 1, weight_data.data[i][1]); 
-            }
             if(i > 3) {
                 var tmp_sum = 0;
                 for(var j = 0; j < 5; j++)
                     tmp_sum += weight_data.data[i - j][1];
                 avg = Math.round((tmp_sum/5)*100)/100;
-                if(i > weight_data.data.length - weight_data.chart_max) {
-                    data.setCell(counter, 2, avg);
-                    counter++;
+                if(!show_all) {
+                    if(i > weight_data.data.length - weight_data.chart_max) {
+                        data.setCell(counter, 0, weight_data.data[i][0]);
+                        data.setCell(counter, 1, weight_data.data[i][1]); 
+                        data.setCell(counter, 2, avg);
+                        counter++;
+                    }
+                } else {
+                    data.setCell(i, 0, weight_data.data[i][0]);
+                    data.setCell(i, 1, weight_data.data[i][1]); 
+                    data.setCell(i, 2, avg);
                 }
                 $('#avg-' + weight_data.data[i][0]).html(avg);
             } else {
