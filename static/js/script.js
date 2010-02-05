@@ -96,16 +96,22 @@ function drawChart() {
         data.addColumn('string', 'Date');
         data.addColumn('number', 'Weight (' + weight_units + ')');
         data.addColumn('number', 'Moving Avg. (' + weight_units + ')');
-        data.addRows(weight_data.data.length);
+        data.addRows((weight_data.chart_max < weight_data.data.length) ? weight_data.chart_max : weight_data.data.length);
+        counter = 0;
         for(var i = 0; i < weight_data.data.length; i++) {
-            data.setCell(i, 0, weight_data.data[i][0]);
-            data.setCell(i, 1, weight_data.data[i][1]); 
+            if(i > weight_data.data.length - weight_data.chart_max) {
+                data.setCell(counter, 0, weight_data.data[i][0]);
+                data.setCell(counter, 1, weight_data.data[i][1]); 
+            }
             if(i > 3) {
                 var tmp_sum = 0;
                 for(var j = 0; j < 5; j++)
                     tmp_sum += weight_data.data[i - j][1];
                 avg = Math.round((tmp_sum/5)*100)/100;
-                data.setCell(i, 2, avg);
+                if(i > weight_data.data.length - weight_data.chart_max) {
+                    data.setCell(counter, 2, avg);
+                    counter++;
+                }
                 $('#avg-' + weight_data.data[i][0]).html(avg);
             } else {
                 $('#avg-' + weight_data.data[i][0]).html('N/A');

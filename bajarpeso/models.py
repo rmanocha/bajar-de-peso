@@ -14,6 +14,7 @@ class WeightTrackerSettings(db.Model):
     target_weight = db.FloatProperty(required = False)
     target_date = db.DateProperty(required = False)
     height = db.IntegerProperty(required = False)
+    chart_max = db.IntegerProperty(default = 40, verbose_name = 'Max data points to show in chart')
 
     def __str__(self):
         return "Using %s for %s" % (self.units, self.user.nickname())

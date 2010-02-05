@@ -107,7 +107,7 @@ def main(request):
 def get_chart_data(request):
     if request.is_ajax():
         all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
-        data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data)}
+        data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data), 'chart_max' : WeightTrackerSettings.all().filter('user =', users.get_current_user()).get().chart_max}
         return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
     else:
         return HttpResponseForbidden('You are not allowed to view this URL')

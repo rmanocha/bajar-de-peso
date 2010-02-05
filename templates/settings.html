@@ -22,9 +22,11 @@
         <div>{{ form.target_weight.label }}</div>
         <div>{{ form.target_date.label }}</div>
         <div>{{ form.height.label }} (in cms)</div>
+        <div>{{ form.chart_max.label }}</div>
         <div><input type="submit" value="Submit" /></div>
     </div>
     <div class="grid_1 spacer">
+        <div>:</div>
         <div>:</div>
         <div>:</div>
         <div>:</div>
@@ -35,12 +37,14 @@
         <div>{{ form.target_weight }}</div>
         <div>{{ form.target_date }}</div>
         <div>{{ form.height }}</div>
+        <div>{{ form.chart_max }}</div>
     </div>
     <div class="grid_10 omega spacer">
         <div {% if form.units.errors %}class="failure"{% endif %}>{% for error in form.units.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
         <div {% if form.target_weight.errors %}class="failure"{% endif %}>{% for error in form.target_weight.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
         <div {% if form.target_date.errors %}class="failure"{% endif %}>{% for error in form.target_date.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
         <div {% if form.height.errors %}class="failure"{% endif %}>{% for error in form.height.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
+        <div {% if form.chart_max.errors %}class="failure"{% endif %}>{% for error in form.chart_max.errors %} {{ error|escape }} {% endfor %} &nbsp;</div>
     </div>
 </form>
 </div>
