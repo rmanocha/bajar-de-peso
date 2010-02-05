@@ -14,10 +14,22 @@
             <div class="grid_3 omega">&nbsp;</div>
         </div>
     {% endif %}
-<div class="spacer bot-margin">
-    <form enctype = "multipart/form-data" action="." method="post">
-        {{ form.file }} <br /><br />
-        <input type="submit" value="Submit" />
-    </form>
+<div class="grid_16 spacer bot-margin">
+    <div class="grid_8 alpha">
+        <form enctype = "multipart/form-data" action="." method="post">
+            {{ form.file }} <br /><br />
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+    <div class="grid_8 omega">
+        <p>The uploaded file is expected to be a csv file with each line following the format: mm/dd/yyyy,weight.</p>
+        <p>An example would be:</p>
+        <div style="margin-left: 15px;">
+            6/4/2009, 100<br />
+            6/5/2009, 99.6<br />
+            10/15/2009, 88.6<br />
+        </div>
+        <p class="top-margin-8">It is expected that the weight given is in the same units as the one supplied in the settings page.</p>
+    </div>
 </div>
 {% endblock %}
