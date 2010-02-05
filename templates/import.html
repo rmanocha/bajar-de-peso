@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if msg %}
+        <div class="grid_16 text-center">
+            <div class="grid_3 alpha">&nbsp;</div>
+            <div id="msg" class="grid_10 msg">
+                {% ifequal msg 3 %}
+                    Import completed succesfully. You can go and <a href="/">view the results</a>.
+                {% else %}
+                    {{ msg }}
+                {% endifequal %}
+            </div>
+            <div class="grid_3 omega">&nbsp;</div>
+        </div>
+    {% endif %}
+<div class="spacer bot-margin">
+    <form enctype = "multipart/form-data" action="." method="post">
+        {{ form.file }} <br /><br />
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+{% endblock %}

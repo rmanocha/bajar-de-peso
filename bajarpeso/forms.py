@@ -31,3 +31,6 @@ class SettingsForm(djangoforms.ModelForm):
     class Meta:
         model = WeightTrackerSettings
         exclude = ['user']
+
+class ImportForm(forms.Form):
+    file = forms.FileField()

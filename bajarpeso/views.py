@@ -7,12 +7,13 @@ from django.utils import simplejson
 from django.views.generic.simple import direct_to_template
 
 from bajarpeso.models import WeightTracker, WeightTrackerSettings
-from bajarpeso.forms import SettingsForm, TrackerForm
+from bajarpeso.forms import SettingsForm, TrackerForm, ImportForm
 from bajarpeso.decorators import login_required
 
 import datetime
 import time
 import math
+from string import strip
 
 GET_LOGOUT_URL = lambda : users.create_logout_url('/')
 
@@ -147,3 +148,44 @@ def delete_data(request):
     else:
         return HttpResponseForbidden('You are not allowed to view this URL')
 
+@login_required(False)
+def import_data(request):
+    get_vars = request.GET.copy()
+    msg = ''
+
+    if request.method == 'POST':
+        form = ImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            status, line = handle_uploaded_file(request.FILES['file'])
+            if not status:
+                return HttpResponseRedirect('/import/?failure=true&line=%s' % str(line))
+            else:
+                return HttpResponseRedirect('/import/?success')
+    else:
+        if get_vars.get('failure') is not None:
+            msg = 'Oops, looks like there was an error in the uploaded file. The error was found on line # %s. Please fix this error and re-upload.' % get_vars.get('line')
+        elif get_vars.get('success') is not None:
+            msg = 3
+
+        form = ImportForm()
+
+    return render_to_response('import.html', {'form' : form, 'logout_url' : GET_LOGOUT_URL(), 'msg' : msg})
+
+def handle_uploaded_file(file):
+    lines = file.read().split('\n')
+    for i, line in enumerate(lines):
+        if line:
+            date, weight = map(strip, line.split(','))
+            try:
+                date = datetime.date.fromtimestamp(time.mktime(time.strptime(date, '%m/%d/%Y')))
+                weight = float(weight)
+            except ValueError:
+                return False, i + 1
+            entry = WeightTracker.all().filter('user = ', users.get_current_user()).filter('date = ', date).get()
+            if entry:
+                entry.weight = weight
+            else:
+                entry = WeightTracker(date = date, weight = weight)
+            entry.put()
+
+    return True, -1

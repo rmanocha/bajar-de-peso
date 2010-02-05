@@ -20,4 +20,5 @@ urlpatterns = patterns('',
     (r'^get_chart_data/$', 'bajarpeso.views.get_chart_data'),
     (r'^delete_data/$', 'bajarpeso.views.delete_data'),
     (r'^big_graph/$', 'bajarpeso.views.big_graph'),
+    (r'^import/$', 'bajarpeso.views.import_data'),
 )
