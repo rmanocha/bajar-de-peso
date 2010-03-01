@@ -38,10 +38,13 @@ def get_weight_time_lost(settings, all_data):
         return ('Make an entry below', 'Make an entry below', 'Make an entry below', 'Make an entry below')
 
     if settings.target_date:
-        days_left = (settings.target_date - latest_entry.date).days
-        weight_left =  settings.target_weight - latest_entry.weight
-        req_rate = weight_left/days_left
-        req_rate = '%.2f' % req_rate
+        if settings.target_date <= datetime.date.today():
+            days_left, weight_left, req_rate = ('Target date reached', )*3
+        else:
+            days_left = (settings.target_date - latest_entry.date).days
+            weight_left =  settings.target_weight - latest_entry.weight
+            req_rate = weight_left/days_left
+            req_rate = '%.2f' % req_rate
     else:
         days_left, weight_left, req_rate = ('Edit your settings', )*3
 
