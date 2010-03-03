@@ -18,6 +18,7 @@ from string import strip
 GET_LOGOUT_URL = lambda : users.create_logout_url('/')
 #Caching for 2 days
 CACHE_TIMEOUT = 3600*24*2
+CHART_DATA_CACHE_KEY = lambda : '-'.join([users.get_current_user().user_id(), "chart_data_dict_json"])
 
 def get_bmi(settings, latest_entry):
     if not latest_entry:
@@ -86,7 +87,7 @@ def main(request):
             return_msg['error'] = 1
             return_msg['msg'] = 'The date was not in the correct format'
         
-        memcache.delete("chart_data_dict_json")
+        memcache.delete(CHART_DATA_CACHE_KEY())
         if request.is_ajax():
             return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
         else:
@@ -113,12 +114,12 @@ def main(request):
 @login_required(False)
 def get_chart_data(request):
     if request.is_ajax():
-        data_dict_json = memcache.get("chart_data_dict_json")
+        data_dict_json = memcache.get(CHART_DATA_CACHE_KEY())
         if data_dict_json is None:
             all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
             data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data), 'chart_max' : WeightTrackerSettings.all().filter('user =', users.get_current_user()).get().chart_max}
             data_dict_json = simplejson.dumps(data_dict)
-            memcache.set("chart_data_dict_json", data_dict_json, CACHE_TIMEOUT)
+            memcache.set(CHART_DATA_CACHE_KEY(), data_dict_json, CACHE_TIMEOUT)
         return HttpResponse(data_dict_json, mimetype='application/json')
     else:
         return HttpResponseForbidden('You are not allowed to view this URL')
