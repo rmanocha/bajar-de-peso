@@ -1,5 +1,5 @@
 # Create your views here.
-from google.appengine.api import users
+from google.appengine.api import users, memcache
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
@@ -16,6 +16,8 @@ import math
 from string import strip
 
 GET_LOGOUT_URL = lambda : users.create_logout_url('/')
+#Caching for 2 days
+CACHE_TIMEOUT = 3600*24*2
 
 def get_bmi(settings, latest_entry):
     if not latest_entry:
@@ -84,6 +86,7 @@ def main(request):
             return_msg['error'] = 1
             return_msg['msg'] = 'The date was not in the correct format'
         
+        memcache.delete("chart_data_dict_json")
         if request.is_ajax():
             return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
         else:
@@ -110,9 +113,13 @@ def main(request):
 @login_required(False)
 def get_chart_data(request):
     if request.is_ajax():
-        all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
-        data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data), 'chart_max' : WeightTrackerSettings.all().filter('user =', users.get_current_user()).get().chart_max}
-        return HttpResponse(simplejson.dumps(data_dict), mimetype='application/json')
+        data_dict_json = memcache.get("chart_data_dict_json")
+        if data_dict_json is None:
+            all_data = WeightTracker.all().filter('user = ', users.get_current_user()).order('date')
+            data_dict = {'data' : map(lambda entry : (str(entry.date), entry.weight), all_data), 'chart_max' : WeightTrackerSettings.all().filter('user =', users.get_current_user()).get().chart_max}
+            data_dict_json = simplejson.dumps(data_dict)
+            memcache.set("chart_data_dict_json", data_dict_json, CACHE_TIMEOUT)
+        return HttpResponse(data_dict_json, mimetype='application/json')
     else:
         return HttpResponseForbidden('You are not allowed to view this URL')
 
