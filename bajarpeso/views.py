@@ -14,26 +14,36 @@ import datetime
 import time
 import math
 from string import strip
+import logging
 
 GET_LOGOUT_URL = lambda : users.create_logout_url('/')
 #Caching for 2 days
 CACHE_TIMEOUT = 3600*24*2
 CHART_DATA_CACHE_KEY = lambda : '-'.join([users.get_current_user().user_id(), "chart_data_dict_json"])
+BMI_CACHE_KEY = lambda : '-'.join([users.get_current_user().user_id(), "bmi_key"])
 
 def get_bmi(settings, latest_entry):
-    if not latest_entry:
-        return 'Make an entry below'
+    logging.info("BMI_CACHE_KEY for %s is %s" % (users.get_current_user(), BMI_CACHE_KEY()))
+    retval = memcache.get(BMI_CACHE_KEY())
+    if retval is None:
+        if not latest_entry:
+            retval = 'Make an entry below'
 
-    if settings.height:
-        if settings.units == 'lbs':
-            bmi = (latest_entry.weight * 703)/math.pow((settings.height/2.54), 2)
+        if settings.height:
+            if settings.units == 'lbs':
+                bmi = (latest_entry.weight * 703)/math.pow((settings.height/2.54), 2)
+            else:
+                bmi = latest_entry.weight/math.pow((settings.height/100.0), 2)
+
+            bmi = '%.2f' % bmi
+            retval = bmi
         else:
-            bmi = latest_entry.weight/math.pow((settings.height/100.0), 2)
+            retval = 'Enter your height in the settings page'
 
-        bmi = '%.2f' % bmi
-        return bmi
+        memcache.set(BMI_CACHE_KEY(), retval, CACHE_TIMEOUT)
+        return retval
     else:
-        return 'Enter your height in the settings page'
+        return retval
 
 def get_weight_time_lost(settings, all_data):
     latest_entry = all_data.get()
@@ -87,7 +97,8 @@ def main(request):
             return_msg['error'] = 1
             return_msg['msg'] = 'The date was not in the correct format'
         
-        memcache.delete(CHART_DATA_CACHE_KEY())
+        #Delete all cache data whenever a new entry is made
+        memcache.delete_multi([CHART_DATA_CACHE_KEY(), BMI_CACHE_KEY()])
         if request.is_ajax():
             return HttpResponse(simplejson.dumps(return_msg), mimetype = 'application/json')
         else:
@@ -137,6 +148,8 @@ def edit_settings(request):
             item = form.save(commit = False)
             item.user = users.get_current_user()
             item.put()
+            #BMI will change if the height is changed.
+            memcache.delete(BMI_CACHE_KEY())
             return HttpResponseRedirect('/settings/?success')
     else:
         if get_vars.get('first') is not None:
